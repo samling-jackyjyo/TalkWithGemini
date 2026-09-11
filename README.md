@@ -26,27 +26,55 @@ It is designed for people who want the power of modern AI workspaces without giv
 
 ## v2.5.0 Highlights
 
-- Expanded Deep Research with reviewable adaptive plans, durable research
-  rounds, evidence audits, partial and versioned reports, built-in and custom
-  templates, specialized scholarly/regulatory sources, frontier steering, and
-  report-version-bound evidence Q&A.
+- Expanded Deep Research with model-knowledge-first planning, bounded
+  knowledge/public lookup, reviewable adaptive plans, durable checkpoints and
+  research rounds, claim-to-evidence audits, partial and versioned reports,
+  manual resume, and a responsive Research workbench. Recovery preserves the
+  selected model, and approved workspace failures pause visibly.
+- Added four built-in research templates for competitive analysis, literature
+  review, due diligence, and technical evaluation, plus local custom template
+  management with revisioned Profile snapshots, explicit inheritance or
+  no-template states, and immutable per-task snapshots. Research also adds
+  read-only arXiv, PubMed, EPO OPS, and SEC EDGAR sources, safe-wave frontier
+  steering, and report-version-bound evidence Q&A with frozen-snapshot citation
+  validation.
+- Added the browser-local `neo-chat-research-extensions` v1 sidecar for
+  templates, source contracts, steering, evidence snapshots, and Q&A threads.
+  Research searches preserve partial batches, respect cooldowns, and run with
+  two-second spacing; evidence recovery keeps committed excerpts and source
+  identity, while localized reports and downloads retain their selected
+  language. These extension records remain outside ZIP backup and encrypted
+  sync.
 - Added an opt-in encrypted WebDAV or S3/MinIO personal vault, including
-  per-domain Automerge documents, encrypted OPFS chunks, conflict handling, and
-  protection against overwriting edits made during synchronization.
+  per-domain Automerge documents, opaque remote names, recovery codes, encrypted
+  OPFS chunks, conflict visibility, transactional apply, and bounded remerge
+  protection for edits made during synchronization.
 - Expanded the foreground Agent runtime with dynamic Tool and Skill discovery,
   task plans, structured questions, scoped Memory, revisioned workspaces,
-  immutable Artifacts, resumable runs, and effect-aware confirmation.
+  immutable Artifacts, MCP resources/prompts, persistent execution records,
+  resumable runs, host-authorized later rounds, and effect-aware confirmation.
+- Added safer stop, switch, and continue-generation behavior that preserves
+  prior blocks, plus reload and sync rehydration that keep durable conversations
+  and explicitly selected in-memory messages intact.
 - Added customizable keyboard shortcuts, temporary text chats, unified
-  sidebar/titlebar conversation actions, Redis-backed read-only sharing, and
-  safer stop, switch, and continue-generation behavior.
-- Added progressive CommonMark rendering, persistent document blocks,
-  HEIC/HEIF conversion, staged image compression, and file-backed multimodal
-  requests for native OpenAI, Google, and Anthropic providers.
+  sidebar/titlebar conversation actions, and Redis-backed read-only sharing with
+  selected branches, configurable expiry, explicit updates, and revocation.
+- Added progressive CommonMark rendering, persistent document blocks, strict
+  ECharts `chart` fences, chart-only/fullscreen views, localized chart states,
+  Markdown table copying, and PNG export for charts, Mermaid diagrams, and mind
+  maps. Mermaid mindmaps now have dedicated node/link styling, while Git graphs,
+  timelines, Kanban boards, radar charts, and treemaps keep readable light/dark
+  palettes in fullscreen and exports.
+- Added direct browser requests for configured custom model providers,
+  multi-password deployment access, HEIC/HEIF conversion, staged image
+  compression, and file-backed multimodal requests for native OpenAI, Google,
+  and Anthropic providers. Web reading can retry Jina failures through a bounded
+  direct read and rejects challenge pages or application errors before evidence
+  creation.
 - Hardened hosted and self-hosted release paths with per-request CSP nonces,
-  explicit Docker access-password setup, Node 24 alignment, tag/version
-  validation, and release-time source, Next.js, Worker, and dependency checks.
-- Kept Research extension records such as custom templates, steering, and report
-  Q&A browser-local; they are not yet included in ZIP backup or encrypted sync.
+  explicit Docker access-password setup and API checks, Node 24 alignment,
+  tag/version validation, release-time source, Next.js, Worker, and dependency
+  checks, and refreshed vulnerable root and MCP Bridge dependency resolutions.
 
 See [CHANGELOG.md](CHANGELOG.md) for the complete release notes.
 
@@ -77,40 +105,49 @@ See [CHANGELOG.md](CHANGELOG.md) for the complete release notes.
 ## Features
 
 - Multi-provider chat with Google, Anthropic, OpenAI, and OpenAI-compatible
-  endpoints, including provider-scoped custom model capabilities.
+  endpoints, including provider-scoped custom model capabilities and direct
+  browser requests for configured custom providers.
 - Native image generation and image editing for models whose metadata exposes image output/input, with ordered mixed text/image message blocks and OPFS-backed Blob URL display caching.
 - File-backed multimodal image input without Base64 for native OpenAI, Google,
   and Anthropic chat; HEIC/HEIF conversion and staged client-side compression
   enforce the 20 MiB source, 10 MiB force-compression, and 5 MiB result limits.
 - Local-first sessions, branches, pinned chats, per-chat composer drafts, reply
   navigation, token/context usage summaries, workspaces, workspace files, and
-  assistant instructions.
+  assistant instructions. Stopping before a conversation switch persists the
+  originating stream; reload and sync rehydration preserve explicitly selected
+  conversations and their loaded messages.
 - Opt-in, end-to-end encrypted WebDAV or S3/MinIO synchronization with local
-  device identity, recovery code, convergent CRDT documents, and encrypted OPFS
-  chunks.
+  device identity, recovery codes, opaque remote names, convergent CRDT
+  documents, conflict visibility, transactional local apply, bounded remerge,
+  and encrypted OPFS chunks.
 - Assistant presets from the LobeHub agent registry plus local custom assistants.
-- Per-chat Agent mode for tool-call-capable models, with scoped Memory,
-  revisioned workspace and Artifact operations, declarative Skills, MCP
-  resources/prompts, sandboxed JavaScript, structured user input, and
-  persistent run/approval state.
+- Per-chat Agent mode for tool-call-capable models, with dynamic Tool and Skill
+  discovery, scoped Memory, revisioned workspace and Artifact operations,
+  declarative Skills, MCP resources/prompts, sandboxed JavaScript, structured
+  user input, resumable execution records, host-authorized later rounds, and
+  effect-aware confirmation.
 - Independent Deep Research mode with model-knowledge-first planning, conditional
   selected-knowledge and public-summary lookup, structured plan approval,
   adaptive breadth/depth research rounds, explicit
   claim-to-evidence auditing, safe foreground pause and manual resume,
   versioned reports, local citations, and a responsive Research workbench. It
-  also includes reusable research templates, read-only arXiv/PubMed/EPO OPS/
-  SEC EDGAR source adapters, safe-wave frontier steering, and threaded
-  closed-book questions against each report version. Reports with evidence gaps
-  remain visible in chat and the workbench, with limitations included in exports.
-  Failed question snapshots do not block reports. Full reports remain immutable
+  also includes four built-in and local custom research templates with revisioned
+  Profile snapshots, explicit inheritance/no-template states, immutable per-task
+  snapshots, read-only arXiv/PubMed/EPO OPS/SEC EDGAR source adapters, safe-wave
+  frontier steering, and threaded closed-book questions against each report
+  version. Questions can be cancelled or retried and validate citations only
+  against the frozen report snapshot. Reports with evidence gaps remain visible
+  in chat and the workbench, with limitations included in exports. Failed
+  question snapshots do not block reports. Full reports remain immutable
   Artifacts referenced by chat. Report headings support English, Chinese, and
   Japanese; appendices have their own tab and a shared Markdown/PDF download menu.
-  Research searches run serially with two-second spacing, and Tavily Research
-  requests allow up to 90 seconds. Search images and their sources can illustrate
-  reports without being counted as verified evidence. Document previews open
-  directly when clicked. Research extension records such as custom templates,
-  steering and report Q&A remain browser-local and are not yet included in ZIP
-  backup or encrypted sync.
+  Research searches run serially with two-second spacing, preserve partial
+  batches, respect cooldowns, and allow up to 90 seconds for Tavily Research and
+  planning summaries. Search images and their sources can illustrate reports
+  without being counted as verified evidence. Document previews open directly
+  when clicked. Research extension records such as custom templates, steering
+  and report Q&A remain browser-local and are not yet included in ZIP backup or
+  encrypted sync.
 - Parameterized text Skills with localized public catalogs, install/uninstall
   flows, local edits, custom skills, auto-selection, workspace presets, and
   ordered non-nested bundles of up to four Skills.
@@ -119,7 +156,7 @@ See [CHANGELOG.md](CHANGELOG.md) for the complete release notes.
   selection, per-plugin authentication, server-side execution,
   transport-derived risk floors, optional confirmation for destructive calls,
   and an authenticated Docker bridge for allowlisted local stdio servers.
-- Built-in tools for web reading, weather, Unsplash search, Agnes/Google image processing, OpenAI-compatible image processing, OpenAI Responses image processing, and Agnes video generation. Agnes image processing supports image-to-image edits, and Agnes video generation supports public image URL to video plus plugin-level model IDs. Image processing plugins remain separate from native model image output.
+- Built-in tools for web reading, weather, Unsplash search, Agnes/Google image processing, OpenAI-compatible image processing, OpenAI Responses image processing, and Agnes video generation. Agnes image processing supports image-to-image edits, and Agnes video generation supports public image URL to video plus plugin-level model IDs. Web reading can fall back once from a Jina failure to a bounded direct public-page read, rejects challenge pages before evidence creation, and reports asynchronous plugin failures through route-level errors. Image processing plugins remain separate from native model image output.
 - Web search through Google native Google Search, OpenAI Web Search, or external providers such as Tavily, Firecrawl, Exa, Bocha, and SearXNG.
 - Local global search in an accessible modal across active chat branches,
   attachments, workspaces, knowledge, and memories, with source/date/role
@@ -139,20 +176,26 @@ See [CHANGELOG.md](CHANGELOG.md) for the complete release notes.
 - Voice input and output through browser APIs, ElevenLabs, Mimo, or compatible configured providers.
 - Rich message rendering for Markdown, safe inline HTML visual blocks, GFM tables, math, code highlighting, Mermaid diagrams, mind maps, ECharts charts, citations, reasoning, tool calls, images, audio, and artifacts.
   CommonMark appears immediately; extension syntax loads as it is discovered,
-  with original-text placeholders and independent block updates. HTML visual
-  instructions apply only to narrative prose, leaving code, math, diagram, and
-  chart syntax intact. `chart` fences use strict JSON with an inline dataset and
-  ECharts specification; `markdown-chart` remains a compatibility alias.
-  Charts show a chart-only view with Markdown table copying. Charts, Mermaid,
-  and mind maps support saving PNG images.
+  with original-text placeholders and independent block updates. Long model
+  output can become persistent document blocks with preview, editing, and
+  export controls. HTML visual instructions apply only to narrative prose,
+  leaving code, math, diagram, and chart syntax intact. `chart` fences use
+  strict JSON with `version: 1`, `renderer: "echarts"`, an inline dataset, and
+  an ECharts specification;
+  `markdown-chart` remains a compatibility alias. Charts show chart-only and
+  fullscreen views with localized loading/error/retry states and Markdown table
+  copying. Charts, Mermaid, and mind maps support saving PNG images; diagram
+  palettes remain readable in fullscreen and exports.
   Default chat instructions use standalone Markdown images when a relevant,
   real image URL is available; Research uses its saved illustration catalog
   without a separate gallery or export appendix.
 - Shared conversation actions in both the sidebar and titlebar, including
-  Redis-backed read-only snapshots with images and research reports. Links expire
-  after 1, 7 or 30 days, or never, selected with expiry buttons; deleting the
-  conversation cancels its share. Sharing is off by default; enable it with
-  `SHARING_ENABLED=true` and both Redis REST configuration values.
+  Redis-backed read-only snapshots with the selected branch, images, and research
+  reports. Links expire after 1, 7 or 30 days, or never, selected with expiry
+  buttons; snapshots support explicit updates and revocation before local
+  deletion. Sharing is off by default; enable it with `SHARING_ENABLED=true` and
+  both Redis REST configuration values. Disabling publication blocks public reads
+  while preserving authenticated revocation.
 - Temporary chat and search from the welcome screen, without saved conversation
   history or a conversation-list entry. Its icon toggles to an exit action and
   the welcome composer explains the history behavior. Leaving the chat discards it;
@@ -235,6 +278,23 @@ behind a proxy that strips spoofed forwarded headers.
 
 ### Docker Image
 
+The official image is published at
+`ghcr.io/u14app/neo-chat:latest`. Pull and run it without building locally:
+
+```bash
+docker pull ghcr.io/u14app/neo-chat:latest
+docker run --rm -p 3000:3000 \
+  -e ACCESS_PASSWORD='replace-with-a-strong-password' \
+  -e BYOK_ALLOW_EPHEMERAL_KEY=true \
+  ghcr.io/u14app/neo-chat:latest
+```
+
+Open `http://localhost:3000` after the container starts. The example enables
+ephemeral BYOK keys for a quick local start; use a stable BYOK key and set
+`BYOK_ALLOW_EPHEMERAL_KEY=false` for production deployments.
+
+To build the image from the current checkout instead:
+
 ```bash
 docker build -t neo-chat:local .
 docker run --rm -p 3000:3000 \
@@ -243,7 +303,8 @@ docker run --rm -p 3000:3000 \
   neo-chat:local
 ```
 
-The Docker workflow builds pull requests and publishes `main` / `v*` tags to GitHub Container Registry:
+The Docker workflow builds pull requests and publishes `main` / `v*` tags to
+GitHub Container Registry. The default-branch image is also published as:
 
 ```text
 ghcr.io/u14app/neo-chat:latest

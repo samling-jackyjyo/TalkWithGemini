@@ -113,6 +113,9 @@ when the matching tag is pushed.
   and MCP dependency updates clear the production audit; tag releases validate
   the package version and pass source, Next.js, Worker, and dependency checks
   before publication.
+- **Dependency security:** Updated vulnerable root and MCP Bridge dependency
+  resolutions for Sharp, JS-YAML, Vitest, baseline-browser-mapping,
+  brace-expansion, Hono, qs, fast-uri, ip-address, and the Hono Node adapter.
 
 ## v2.4.0
 

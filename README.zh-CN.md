@@ -26,20 +26,37 @@ Neo Chat 是一个可自托管、本地优先的 AI 对话应用，基于 Next.j
 
 ## v2.5.0 亮点
 
-- 深度研究新增可审阅的自适应计划、持久化研究轮次、论据审计、部分及版本化报告、
-  内置与自定义模板、专业学术/监管来源、前沿节点调整，以及绑定报告版本的论据问答。
-- 新增显式启用的 WebDAV 或 S3/MinIO 加密个人保险库，包含按领域拆分的 Automerge
-  文档、加密 OPFS 分块、冲突处理，并避免同步覆盖下载期间产生的本地编辑。
+- 深度研究新增模型知识优先的规划、受限知识/公开查询、可审阅的自适应计划、持久化
+  检查点和研究轮次、主张-证据审计、部分及版本化报告、手动恢复和响应式研究工作台。
+  恢复时保留原选模型，获准的工作区失败会显式暂停。
+- 新增竞品分析、文献综述、尽职调查和技术评估四种内置研究模板，以及带 Profile 修订
+  快照、显式继承或无模板状态、每任务不可变快照的本地自定义模板管理；同时提供只读的
+  arXiv、PubMed、EPO OPS、SEC EDGAR 来源、安全波次前沿调整，以及针对冻结快照并校验
+  引用的报告版本论据问答。
+- 新增浏览器本地 `neo-chat-research-extensions` v1 sidecar，保存模板、来源契约、前沿
+  调整、证据快照和问答线程。研究搜索保留部分批次、遵守冷却时间并间隔两秒串行执行；
+  证据恢复保留已提交摘录和来源身份，报告与下载沿用所选语言。这些扩展记录仍不进入 ZIP
+  备份或端到端加密同步。
+- 新增显式启用的 WebDAV 或 S3/MinIO 加密个人保险库，包含按领域拆分的 Automerge 文档、
+  不透明远端名称、恢复代码、加密 OPFS 分块、冲突可见性、事务式应用，以及对同步期间本地
+  编辑的有界重合并保护。
 - 扩展仅在浏览器前台运行的 Agent Runtime：动态 Tool/Skill、任务计划、结构化提问、
-  分 Scope Memory、revision 工作区、不可变 Artifact、可恢复运行和按副作用授权。
-- 新增可自定义快捷键、临时文本会话、统一的侧栏/标题栏会话操作、Redis 只读分享，
-  并修复停止后切换及继续生成时的状态保留。
-- 新增渐进式 CommonMark 渲染、持久化文档块、HEIC/HEIF 转换、分阶段图片压缩，
-  以及 OpenAI、Google、Anthropic 原生供应商的文件化多模态请求。
-- 通过逐请求 CSP nonce、Docker 访问密码配置、Node 24 对齐、tag/版本校验，
-  以及发布前源码、Next.js、Worker 与依赖检查加强托管和自托管发布流程。
-- 自定义模板、前沿调整、报告问答等研究扩展记录仍只保存在当前浏览器，
-  尚不进入 ZIP 备份或端到端加密同步。
+  分 Scope Memory、revision 工作区、不可变 Artifact、MCP Resources/Prompts、持久化执行记录、
+  可恢复运行、宿主授权的后续轮次和按副作用授权。
+- 新增停止、切换和继续生成时的状态保留，并让重新加载与同步恢复保留持久会话及明确选中的
+  内存会话消息。
+- 新增可自定义快捷键、临时文本会话、统一的侧栏/标题栏会话操作，以及支持选中分支、可配置
+  有效期、显式更新和撤销的 Redis 只读分享。
+- 新增渐进式 CommonMark 渲染、持久化文档块、严格 ECharts `chart` 代码块、仅图表/全屏视图、
+  本地化图表状态、Markdown 表格复制，以及图表、Mermaid 图和思维导图的 PNG 导出。Mermaid
+  思维导图使用专用节点/连线样式，Git 图、时间线、Kanban、雷达图和树图在全屏与导出中保留
+  可读的明暗配色。
+- 新增已配置自定义模型供应商的浏览器直连、多密码部署访问、HEIC/HEIF 转换、分阶段图片压缩，
+  以及 OpenAI、Google、Anthropic 原生供应商的文件化多模态请求。网页阅读在 Jina 失败时可有界
+  回退到直接读取，并在创建证据前拒绝挑战页或应用错误。
+- 通过逐请求 CSP nonce、明确的 Docker 访问密码和 API 检查、Node 24 对齐、tag/版本校验，
+  以及发布前源码、Next.js、Worker 和依赖检查加强托管和自托管发布流程，同时更新根项目与
+  MCP Bridge 中存在漏洞的依赖解析。
 
 完整发布说明见 [CHANGELOG.md](CHANGELOG.md)。
 
@@ -69,37 +86,38 @@ Neo Chat 是一个可自托管、本地优先的 AI 对话应用，基于 Next.j
 ## 功能特性
 
 - 支持 Google、Anthropic、OpenAI 和 OpenAI-compatible endpoint 的多供应商
-  对话，并按供应商隔离自定义模型能力 metadata。
+  对话，并按供应商隔离自定义模型能力 metadata；已配置的自定义供应商可由浏览器直连。
 - 对 metadata 声明支持图片输出/输入的模型提供原生图片生成和图片编辑，图文混排会按模型输出顺序渲染，并使用 OPFS + Blob URL 做图片显示缓存。
 - OpenAI、Google、Anthropic 原生对话使用文件化多模态图片输入，不再发送
   Base64；HEIC/HEIF 转换与分阶段客户端压缩执行 20 MiB 原图上限、10 MiB
   强制压缩阈值和 5 MiB 压缩结果上限。
 - 本地优先的会话、分支、置顶对话、会话级输入草稿、回复导航、Token/上下文
-  用量摘要、工作区、工作区文件和助理指令。
-- 显式启用的 WebDAV 或 S3/MinIO 端到端加密同步，包含设备身份、恢复代码、
-  可收敛 CRDT 文档和加密 OPFS 分块。
+  用量摘要、工作区、工作区文件和助理指令。停止生成后切换会话会保存原始流；重新加载和
+  同步恢复会保留明确选中的会话及其已加载消息。
+- 显式启用的 WebDAV 或 S3/MinIO 端到端加密同步，包含设备身份、恢复代码、不透明远端名称、
+  可收敛 CRDT 文档、冲突可见性、事务式本地应用、有界重合并和加密 OPFS 分块。
 - 支持 LobeHub Agent Registry 助理预设，也支持本地自定义助理。
-- 支持面向工具调用模型的会话级 Agent 模式，由浏览器编排研究、分 Scope Memory、
-  revision 工作区与 Artifact、声明式 Skill、MCP Resources/Prompts、沙箱
-  JavaScript、结构化提问和持久化运行/授权状态。
+- 支持面向工具调用模型的会话级 Agent 模式，由浏览器动态发现 Tool/Skill，编排分 Scope
+  Memory、revision 工作区与 Artifact、声明式 Skill、MCP Resources/Prompts、沙箱 JavaScript、
+  结构化提问、可恢复执行记录和按副作用授权；宿主加载的工具会明确授权给后续模型轮次。
 - 支持独立深度研究模式：先用模型已有知识拟定计划，仅在概念不明确时依次查询
   选定知识库和公开摘要；经结构化计划确认后按 breadth/depth 自适应推进研究轮次，显式审计主张与证据关系，并支持安全
   暂停、手动恢复、报告版本、本地引用和响应式研究工作台；同时提供可复用研究模板、
   只读的 arXiv/PubMed/EPO OPS/SEC EDGAR 来源适配器、研究轮次结束时的前沿节点调整，
-  以及绑定到每个报告版本的多话题闭卷问答。论据不足的报告仍在聊天和工作台展示，
-  导出保留限制说明；问答快照失败不阻碍报告交付。完整报告以不可变 Artifact 保存，
-  聊天保留其引用。报告标准标题支持中英日文，附录放入补充材料标签页，Markdown/PDF
-  共用下载菜单；研究搜索串行执行并至少间隔两秒，Tavily 研究请求最多等待 90 秒。
-  搜索图片及其来源可作为报告配图，不计为已验证论据。点击文档标题或正文预览即可
-  打开阅读。自定义模板、前沿调整、报告问答等研究扩展记录仍只保存在当前浏览器，
-  尚不进入 ZIP 备份或端到端加密同步。
+  以及绑定到每个报告版本的多话题闭卷问答；问答支持取消和重试，且不调用工具、网络、Memory
+  或 Research 执行，只针对冻结的报告快照校验引用。论据不足的报告仍在聊天和工作台展示，导出保留限制说明；问答快照失败不阻碍
+  报告交付。完整报告以不可变 Artifact 保存，聊天保留其引用。报告标准标题支持中英日文，
+  附录放入补充材料标签页，Markdown/PDF 共用下载菜单；研究搜索串行执行并至少间隔两秒，
+  保留部分批次、遵守冷却时间，Tavily 研究和规划摘要最多等待 90 秒。搜索图片及其来源可
+  作为报告配图，不计为已验证论据。点击文档标题或正文预览即可打开阅读。自定义模板、前沿
+  调整、报告问答等研究扩展记录仍只保存在当前浏览器，尚不进入 ZIP 备份或端到端加密同步。
 - 支持参数化文本技能：本地化公共目录、安装/卸载、编辑内置技能、本地自定义
   技能、自动选择、工作区预设，以及最多四个普通技能组成的有序非嵌套 bundle。
 - 支持 OpenAPI 风格插件工具，以及 remote Streamable HTTP 与 legacy SSE MCP
   服务器，包含加密的安装时凭据、实际 transport 持久化、插件鉴权、服务端执行、
   风险下限和可选的破坏性调用确认；本地 Docker 部署还可通过独立鉴权桥接使用
   allowlist 中的 stdio 服务器。
-- 内置网页阅读、天气、Unsplash 搜索、Agnes/Google 图片处理、OpenAI 兼容图片处理、OpenAI Responses 图片处理、Agnes 视频生成工具。Agnes 图片处理支持图生图编辑，Agnes 视频生成支持公开图片 URL 生成视频和插件级模型 ID。图片处理插件和模型原生图片输出保持分离。
+- 内置网页阅读、天气、Unsplash 搜索、Agnes/Google 图片处理、OpenAI 兼容图片处理、OpenAI Responses 图片处理、Agnes 视频生成工具。Agnes 图片处理支持图生图编辑，Agnes 视频生成支持公开图片 URL 生成视频和插件级模型 ID。网页阅读在 Jina 失败时只回退一次到有界的公开页面直接读取，在创建证据前拒绝挑战页，并通过路由级错误处理报告异步插件失败。图片处理插件和模型原生图片输出保持分离。
 - 支持 Google 原生 Google Search、OpenAI Web Search，以及 Tavily、Firecrawl、Exa、Bocha、SearXNG 等外部搜索。
 - 在可访问的模态框中本地全局搜索活跃对话分支、附件、工作区、知识库和记忆，
   提供来源/日期/角色筛选和结果直达；设置页也提供独立的本地化搜索。
@@ -112,15 +130,18 @@ Neo Chat 是一个可自托管、本地优先的 AI 对话应用，基于 Next.j
 - 支持本地记忆、可选记忆搜索、后台记忆提取和记忆整合。
 - 支持浏览器语音 API、ElevenLabs、Mimo 或兼容配置的语音输入输出。
 - 支持 Markdown、安全内联 HTML 视觉块、GFM 表格、数学公式、代码高亮、Mermaid 图、思维导图、ECharts 图表、引用、推理、工具调用、图片、音频和产物渲染。
-  基础 CommonMark 立即显示，识别到扩展语法后按需加载，先保留原文再局部更新。
-  HTML 美化仅用于叙述正文，不改写代码、公式、图示和 chart 图表语法。
-  `chart` 代码块使用包含内联数据和 ECharts 配置的严格 JSON；`markdown-chart` 继续作为兼容别名。
-  Chart 仅显示图表，支持复制 Markdown 表格；Chart、Mermaid 和思维导图均支持保存 PNG 图片。
+  基础 CommonMark 立即显示，识别到扩展语法后按需加载，先保留原文再局部更新；较长的模型输出
+  可转为支持预览、编辑和导出的持久化文档块。HTML 美化仅用于叙述正文，不改写代码、公式、
+  图示和 chart 图表语法。`chart` 代码块使用包含 `version: 1`、`renderer: "echarts"`、内联数据和 ECharts 配置的严格 JSON；
+  `markdown-chart` 继续作为兼容别名。Chart 提供仅图表和全屏视图、本地化加载/错误/重试状态，
+  并支持复制 Markdown 表格；Chart、Mermaid 和思维导图均支持保存 PNG 图片，图表配色在全屏和
+  导出中保持可读。
   默认聊天提示词在存在相关、真实图片 URL 时使用独立 Markdown 插图；研究报告沿用
   已保存的图片来源目录，页面和导出不再追加独立图库或图片资料附录。
-- 侧栏和标题栏共用会话操作，支持由 Redis 保存的只读分享快照，包含图片与研究报告。
-  有效期通过按钮组选择 1 天、7 天、30 天或永久；删除原会话时同时取消分享。
-  分享默认关闭，需设置 `SHARING_ENABLED=true` 并配置完整的 Redis REST 地址和令牌。
+- 侧栏和标题栏共用会话操作，支持由 Redis 保存的只读分享快照，包含选中分支、图片与研究报告。
+  有效期通过按钮组选择 1 天、7 天、30 天或永久；支持在删除原会话前显式更新和撤销分享。
+  分享默认关闭，需设置 `SHARING_ENABLED=true` 并配置完整的 Redis REST 地址和令牌；禁用发布时
+  会阻止公开读取，但保留已认证的撤销能力。
 - 欢迎页提供临时聊天与搜索，不保存会话记录，也不出现在会话列表中；启用后图标变为
   退出操作，输入框下方说明历史记录行为。离开即销毁；临时会话不开放 Agent、
   研究、附件、工具、图片生成与记忆功能。
@@ -197,6 +218,21 @@ Compose 要求设置访问密码，会在 `http://localhost:3000` 暴露 Neo Cha
 
 ### Docker 镜像
 
+官方镜像发布为 `ghcr.io/u14app/neo-chat:latest`，无需本地构建即可拉取并运行：
+
+```bash
+docker pull ghcr.io/u14app/neo-chat:latest
+docker run --rm -p 3000:3000 \
+  -e ACCESS_PASSWORD='请替换为高强度密码' \
+  -e BYOK_ALLOW_EPHEMERAL_KEY=true \
+  ghcr.io/u14app/neo-chat:latest
+```
+
+容器启动后打开 `http://localhost:3000`。上例为方便本地快速启动而允许临时 BYOK 密钥；
+生产部署应使用稳定的 BYOK 密钥，并设置 `BYOK_ALLOW_EPHEMERAL_KEY=false`。
+
+如需从当前代码仓库自行构建镜像：
+
 ```bash
 docker build -t neo-chat:local .
 docker run --rm -p 3000:3000 \
@@ -205,7 +241,8 @@ docker run --rm -p 3000:3000 \
   neo-chat:local
 ```
 
-Docker workflow 会为 pull request 构建镜像，并将 `main` / `v*` 标签发布到 GitHub Container Registry：
+Docker workflow 会为 pull request 构建镜像，并将 `main` / `v*` 标签发布到 GitHub
+Container Registry；默认分支镜像也会发布为：
 
 ```text
 ghcr.io/u14app/neo-chat:latest
